@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DataService from "../service/dataService.js";
 import QRCodeCanvas from "./QRCodeCanvas.jsx";
 
-export default function Clazz() {
+export default function ClazzTime() {
   useEffect(() => {
     getAllClazz();
   }, []);
@@ -14,7 +14,6 @@ export default function Clazz() {
   const getAllClazz = async () => {
     try {
       const response = await DataService.getAllClazz();
-      console.log(response.data);
       setListClazz(response.data);
     } catch (e) {
       alert(e);
@@ -34,7 +33,7 @@ export default function Clazz() {
                 <li key={e.id}>{e.name}</li>
                 <Button onClick={generateQRCode}>Gerar QRCode</Button>
                 {showQRCode && (
-                  <QRCodeCanvas text="http://192.168.0.101:8080/api/clazz/"></QRCodeCanvas>
+                  <QRCodeCanvas text="http://192.168.0.10:8080/api/clazz/"></QRCodeCanvas>
                 )}
               </div>
             );

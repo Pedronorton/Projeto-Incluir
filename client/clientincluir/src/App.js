@@ -3,7 +3,8 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
 import Users from "./views/Users";
-import Clazz from "./views/Clazz";
+import Clazz from "./views/Clazz/Clazz";
+import ClazzTime from "./views/ClazzTime";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route exact path="/" element={<Dashboard />}></Route>
           <Route exact path="/users" element={<Users />}></Route>
           <Route exact path="/clazz" element={<Clazz />}></Route>
+          <Route exact path="/clazzTime" element={<ClazzTime />}></Route>
           <Route exact path="/presenca" element={<Clazz />}></Route>
         </Routes>
       </BrowserRouter>
