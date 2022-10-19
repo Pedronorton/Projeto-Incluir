@@ -7,6 +7,7 @@ import Login from './src/screens/Login';
 import ScanScreen from './src/screens/Scan';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import SignUp from './src/screens/SignUp';
 
 const Stack = createStackNavigator();
 
@@ -35,10 +36,11 @@ const Application = () => {
     };
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={auth == true ? 'QRCode' : 'Login'}>
-                <Stack.Screen name={'QRCode'} component={QRCodeScreen} />
-                <Stack.Screen name={'Scan'} component={ScanScreen} />
+            <Stack.Navigator>
                 <Stack.Screen name={'Login'} component={Login} />
+                <Stack.Screen name={'QRCode'} component={QRCodeScreen} />
+                <Stack.Screen name={'SignUp'} component={SignUp} />
+                <Stack.Screen name={'Scan'} component={ScanScreen} />
             </Stack.Navigator>
             <StatusBar style="auto" />
         </NavigationContainer>

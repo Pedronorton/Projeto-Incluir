@@ -4,37 +4,18 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ActivityInd
 import DataService from '../service/DataService';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DateInput } from 'react-native-date-input';
+import dayjs from 'dayjs';
 
-export default function Login() {
+export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [responsibility, setResponsibility] = useState('');
+    const [entryDate, setEntryDate] = useState('');
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingRefreshToken, setIsLoadingRefreshToken] = useState(false);
-    useEffect(() => {
-        refreshToken();
-    }, []);
 
-    const refreshToken = async () => {
-        try {
-            setIsLoadingRefreshToken(true);
-            const token = await AsyncStorage.getItem('@refreshToken');
-            console.log(token);
-
-            const data = {
-                refreshToken: token
-            };
-            const response = await DataService.refreshToken(data);
-            console.log(response);
-
-            await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
-            await AsyncStorage.setItem('@token', response.data.accessToken);
-            navigation.navigate('QRCode');
-        } catch (e) {
-            console.log(e);
-        }
-        setIsLoadingRefreshToken(false);
-    };
     const handleLogin = async () => {
         try {
             const data = {
@@ -57,12 +38,6 @@ export default function Login() {
         }
     };
 
-    const handleChangeRoute = (route) => {
-        console.log('aqui');
-
-        navigation.navigate(route);
-    };
-
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
@@ -80,21 +55,27 @@ export default function Login() {
                     <View style={styles.inputView}>
                         <TextInput style={styles.TextInput} placeholder="Password." placeholderTextColor="#003f5c" secureTextEntry={true} onChangeText={(password) => setPassword(password)} />
                     </View>
-
-                    <TouchableOpacity>
-                        <Text style={styles.forgot_button}>Esqueci minha senha</Text>
-                    </TouchableOpacity>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder="Cargo."
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(responsibility) => setResponsibility(responsibility)}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <DateInput
+                            dateFormat={'DD/MM/YYYY'}
+                            defaultValue={new Date(dayjs().subtract(5, 'year').format('DD/MM/YYYY'))}
+                            defaultDate={new Date(dayjs().subtract(5, 'year'))}
+                            minimumDate={new Date(dayjs().subtract(10, 'year'))}
+                            maximumDate={new Date()}
+                        />
+                    </View>
 
                     <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-                        <Text>LOGIN</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.loginBtn}
-                        onPress={() => {
-                            handleChangeRoute('SignUp');
-                        }}
-                    >
-                        <Text>Cadastrar</Text>
+                        <Text>Criar</Text>
                     </TouchableOpacity>
                 </>
             ) : (
