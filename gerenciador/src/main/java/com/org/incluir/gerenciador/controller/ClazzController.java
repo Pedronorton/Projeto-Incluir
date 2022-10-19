@@ -1,6 +1,7 @@
 package com.org.incluir.gerenciador.controller;
 
 
+import com.org.incluir.gerenciador.dto.ClazzRequestDTO;
 import com.org.incluir.gerenciador.model.Clazz;
 import com.org.incluir.gerenciador.service.ClazzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class ClazzController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    private ResponseEntity<?> criar(@RequestBody Clazz clazz){
-        Clazz newClazz = clazzService.criar(clazz);
+    private ResponseEntity<?> criar(@RequestBody ClazzRequestDTO clazzDTO){
+        Clazz newClazz = clazzService.criar(clazzDTO);
         return ResponseEntity.ok(newClazz);
     }
 }

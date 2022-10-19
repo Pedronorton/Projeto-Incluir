@@ -1,26 +1,30 @@
 package com.org.incluir.gerenciador.model;
 
-
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
-@Document(collection = "clazzTime")
+import java.time.Instant;
+
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ClazzTime {
-
+@Data
+@Document(collection = "refreshToken")
+public class RefreshToken {
     @Id
     @Indexed(unique = true)
     private String id;
-    private String initialHour;
-    private String finalHour;
-    private Integer day;
+
+    @DBRef
+    private User user;
+
+    private String token;
+
+    private Instant expiryDate;
 
 
 }
