@@ -6,10 +6,7 @@ import com.org.incluir.gerenciador.model.Clazz;
 import com.org.incluir.gerenciador.service.ClazzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +27,11 @@ public class ClazzController {
     private ResponseEntity<?> criar(@RequestBody ClazzRequestDTO clazzDTO){
         Clazz newClazz = clazzService.criar(clazzDTO);
         return ResponseEntity.ok(newClazz);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    private ResponseEntity<?> delete(@PathVariable String id){
+       clazzService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

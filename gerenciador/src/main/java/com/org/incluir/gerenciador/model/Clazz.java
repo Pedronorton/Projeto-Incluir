@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @Document(collection = "clazz")
 @Getter
@@ -19,8 +21,11 @@ public class Clazz {
     private String id;
     private String name;
     private String place;
+    private Integer day;
+    private Date initialHour;
+    private Date finalHour;
 
-    @DBRef
-    private ClazzTime clazzTime;
+//    @DBRef
+//    private ClazzTime clazzTime;
 
 }

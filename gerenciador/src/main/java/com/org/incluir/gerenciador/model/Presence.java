@@ -21,13 +21,14 @@ public class Presence {
     @Indexed(unique = true)
     private Long id;
     @DBRef
-    private QRCode idQRCode;
+    private QRCode qRCode;
     @DBRef
-    private Clazz idClazz;
+    private Clazz clazz;
     @DBRef
-    private User idUser;
+    private User user;
 
     private Date startedHour;
     private Date endHour;
-    private Boolean confirmation;
+    private Boolean inConfirmation;
+    private Boolean outConfirmation;
 }

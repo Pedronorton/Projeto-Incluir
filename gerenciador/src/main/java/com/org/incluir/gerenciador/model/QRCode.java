@@ -18,7 +18,7 @@ public class QRCode {
 
     @Id
     @Indexed(unique = true)
-    private Long id;
+    private String id;
 
     private String url;
 
