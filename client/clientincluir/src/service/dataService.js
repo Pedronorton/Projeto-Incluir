@@ -10,5 +10,14 @@ class DataService {
   postClazz(data) {
     return Axios.post(`${URL}/clazz/`, data);
   }
+  postQRCode(id) {
+    return Axios.post(`${URL}/qrcode/${id}`);
+  }
+  getQRCodeByURL(link) {
+    return Axios.get(link);
+  }
+  getAllQRCode() {
+    return Axios.get(`${URL}/qrcode/`);
+  }
 }
 export default new DataService();
