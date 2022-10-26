@@ -35,8 +35,17 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
         if (supported) {
             // Opening the link with some app, if the URL scheme is "http" the web link should be opened
             // by some browser in the mobile
-            const url = 'http://192.168.0.108:8080/api/clazz/';
-
+            const splitLink = link.split('/');
+            let url = '';
+            for (let i = 0; i < splitLink.length - 1; i++) {
+                url += splitLink[i] + '/';
+            }
+            const data = {
+                idClazz: splitLink[splitLink.length - 1],
+                idUser: 'Aqui passa o id na mão mesmo, pegando do banco',
+                idQRCode: ''
+            };
+            await DataService.postPresence();
             await Linking.openURL(url);
         } else {
             Alert.alert(`Don't know how to open this URL: ${link}`);
