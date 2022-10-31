@@ -20,40 +20,46 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DataService from "../../service/dataService.js";
-import QRCodeCanvas from "../QRCodeCanvas.jsx";
+// import QRCodeCanvas from "../QRCodeCanvas.jsx";
+import { QRCodeCanvas } from "qrcode.react";
 import Paper from "@mui/material/Paper";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import QRCodeDocument from "../../components/QRCodeDocument";
 
 import "./clazz.css";
 export default function Clazz() {
-  useEffect(() => {
-    getAllClazz();
-  }, []);
-
   const [listClazz, setListClazz] = useState([]);
-  const [showQRCode, setShowQRCode] = useState(false);
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
   const [hour, setHour] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [rows, setRows] = useState([]);
+  const [qrCodeIds, setQrcodeIds] = useState([]);
 
   const [QRCode, setQRCode] = useState({});
+
+  useEffect(() => {
+    getAllClazz();
+    fetchQRCodes();
+  }, []);
+
+  useEffect(() => {
+    createRows();
+  }, [listClazz, QRCode]);
 
   const fetchQRCodes = async () => {
     try {
       const obj = {};
       const response = await DataService.getAllQRCode();
       response.data.forEach((element) => {
-        obj[element.id] = element;
+        const key = element.key.split("-")[0];
+        obj[key] = element;
       });
       setQRCode(obj);
     } catch (e) {
       alert(e);
     }
   };
-
-  useEffect(() => {
-    fetchQRCodes();
-  }, []);
 
   const handleChangeHour = (event) => {
     setHour(event.target.value);
@@ -76,40 +82,71 @@ export default function Clazz() {
       alert(e);
     }
   };
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
-  const generateQRCode = async (idClazz) => {
-    const link = "http://192.168.0.104:8080/api/qrcode/" + idClazz;
-    try {
-      await DataService.getQRCodeByURL(link);
-    } catch (e) {
-      if (e.response.status == 404) {
-        try {
-          const response = await DataService.postQRCode(idClazz);
-          let obj = {};
-          const qrCode = response.data;
-          obj[qrCode.url] = qrCode;
-
-          setQRCode(obj);
-        } catch (eQrCode) {
-          console.log(eQrCode);
-        }
+  const createRows = () => {
+    let list = [];
+    listClazz.forEach((element) => {
+      const initialDate = new Date(element.initialHour);
+      const finalDate = new Date(element.finalHour);
+      const initialHour =
+        String(initialDate.getHours()).padStart(2, "0") +
+        ":" +
+        String(initialDate.getMinutes()).padStart(2, "0");
+      const finalHour =
+        String(finalDate.getHours()).padStart(2, "0") +
+        ":" +
+        String(finalDate.getMinutes()).padStart(2, "0");
+      const data = {
+        id: element.id,
+        name: element.name,
+        hour: initialHour + "h - " + finalHour + "h",
+        place: element.place,
+      };
+      if (QRCode[element.id] != null) {
+        data.qrCode = QRCode[element.id];
+        insertIdQRCode(QRCode[element.id].id);
       }
-    }
-    setShowQRCode(true);
+      list.push(data);
+    });
+    setRows(list);
   };
+
+  const insertIdQRCode = (id) => {
+    let list = [...qrCodeIds];
+    if (!list.includes(id)) {
+      list.push(id);
+      setQrcodeIds(list);
+    }
+  };
+
+  const generateQRCode = async (idClazz) => {
+    const date = new Date();
+    const data = {
+      idClazz: idClazz,
+      key: idClazz + "-" + date,
+    };
+    try {
+      // await DataService.getQRCodeByKey(key);
+      const response = await DataService.postQRCode(data);
+      let obj = { ...QRCode };
+      const qrCode = response.data;
+      console.log(response.data);
+      if (qrCode && qrCode.key.includes("-")) {
+        const key = qrCode.key.split("-")[0];
+        obj[key] = qrCode;
+
+        setQRCode(obj);
+        insertIdQRCode(qrCode.id);
+      }
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleSubmit = async () => {
+    let list = [...listClazz];
     let date = new Date();
-    // console.log(hour);
     const data = {
       name: name,
       place: place,
@@ -124,6 +161,8 @@ export default function Clazz() {
 
     try {
       const response = await DataService.postClazz(data);
+      list.push(response.data);
+      setListClazz(list);
     } catch (e) {
       alert(e);
     }
@@ -142,9 +181,14 @@ export default function Clazz() {
             >
               Adicionar
             </Button>
-            <Button variant="contained" color="error" className="button">
-              Deletar
-            </Button>
+            <PDFDownloadLink
+              document={<QRCodeDocument obj={QRCode} />}
+              fileName="qrcode.pdf"
+            >
+              <Button variant="contained" color="success" className="button">
+                Download
+              </Button>
+            </PDFDownloadLink>
           </div>
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Adicionar</DialogTitle>
@@ -221,13 +265,15 @@ export default function Clazz() {
           </Dialog>
         </div>
         <div>
-          {/* <TableContainer component={Paper}>
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>Nome</TableCell>
-                  <TableCell align="right">Horário</TableCell>
-                  <TableCell align="right">QRCode</TableCell>
+                  <TableCell align="center">Horário</TableCell>
+                  <TableCell align="center">Sala</TableCell>
+                  <TableCell align="center">Ações</TableCell>
+                  <TableCell align="center">QRCode</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -239,42 +285,53 @@ export default function Clazz() {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
+                    <TableCell align="center">{row.hour}</TableCell>
+                    <TableCell align="center">{row.place}</TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          generateQRCode(row.id);
+                        }}
+                      >
+                        Gerar QRCode
+                      </Button>
+                      {/* <PDFDownloadLink
+                        document={
+                          <QRCodeDocument
+                            ids={}
+                            row={row}
+                          />
+                        }
+                        fileName="qrcode.pdf"
+                      >
+                        <Button
+                          variant="contained"
+                          color="success"
+                          className="button"
+                        >
+                          Download
+                        </Button>
+                      </PDFDownloadLink> */}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.qrCode && (
+                        // <QRCodeCanvas
+                        //   text={row.qrCode.id + "-" + row.qrCode.key}
+                        // ></QRCodeCanvas>
 
-                    <TableCell align="right">
-                      <QRCodeCanvas
-                        text={"http://192.168.0.104:8080/api/qrcode/"}
-                      ></QRCodeCanvas>
+                        <QRCodeCanvas
+                          id={row.qrCode.id}
+                          value={row.qrCode.id + "-" + row.qrCode.key}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          </TableContainer> */}
+          </TableContainer>
         </div>
-        <ul>
-          {listClazz.length > 0 &&
-            listClazz.map((e) => {
-              return (
-                <div>
-                  <li key={e.id}>{e.name}</li>
-                  <Button
-                    onClick={() => {
-                      generateQRCode(e.id);
-                    }}
-                  >
-                    Gerar QRCode
-                  </Button>
-
-                  {showQRCode && (
-                    <QRCodeCanvas
-                      text={"http://192.168.0.104:8080/api/qrcode/" + e.id}
-                    ></QRCodeCanvas>
-                  )}
-                </div>
-              );
-            })}
-        </ul>
       </div>
     </div>
   );

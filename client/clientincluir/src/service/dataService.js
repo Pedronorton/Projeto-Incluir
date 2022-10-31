@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const URL = "http://localhost:8080/api";
+const URL = "http://localhost:8081/api";
 
 class DataService {
   //Grammar
@@ -10,10 +10,10 @@ class DataService {
   postClazz(data) {
     return Axios.post(`${URL}/clazz/`, data);
   }
-  postQRCode(id) {
-    return Axios.post(`${URL}/qrcode/${id}`);
+  postQRCode(data) {
+    return Axios.post(`${URL}/qrcode/`, data);
   }
-  getQRCodeByURL(link) {
+  getQRCodeByKey(link) {
     return Axios.get(link);
   }
   getAllQRCode() {
