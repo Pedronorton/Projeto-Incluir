@@ -1,5 +1,6 @@
 package com.org.incluir.gerenciador.controller;
 
+import com.org.incluir.gerenciador.dto.QRCodeDTO;
 import com.org.incluir.gerenciador.errors.NotFoundError;
 import com.org.incluir.gerenciador.model.QRCode;
 import com.org.incluir.gerenciador.service.QRCodeService;
@@ -17,15 +18,18 @@ public class QRCodeController {
     @Autowired
     private QRCodeService qrCodeService;
 
-    @PostMapping(value = "/{keyQRCode}")
-    public ResponseEntity<?> criar(@PathVariable String keyQRCode){
-        QRCode qrCode = qrCodeService.create(keyQRCode);
-        return ResponseEntity.ok().body(qrCode);
+    @PostMapping(value = "/")
+    public ResponseEntity<?> criar(@RequestBody QRCodeDTO qrCodeDTO) throws NotFoundError {
+        QRCode qrCode = qrCodeService.create(qrCodeDTO);
+        if(qrCode != null){
+            return ResponseEntity.ok().body(qrCode);
+        }
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{url}")
-    public ResponseEntity<?> get(@PathVariable String url) throws NotFoundError {
-        Optional<QRCode> qrCode = qrCodeService.findByUrl(url);
+    @GetMapping(value = "/{key}")
+    public ResponseEntity<?> get(@PathVariable String key) throws NotFoundError {
+        Optional<QRCode> qrCode = qrCodeService.findByKey(key);
         return ResponseEntity.ok().body(qrCode);
     }
 

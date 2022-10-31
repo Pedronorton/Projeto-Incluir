@@ -40,4 +40,45 @@ public class DateUtil {
 
         return c;
     }
+
+    public static boolean afterOrEquals( final Date dt1, final Date dt2 ) {
+        if ( ( dt1 == null ) || ( dt2 == null ) ) {
+            return false;
+        }
+        return DateUtil.trunc( dt1 ).after( DateUtil.trunc( dt2 ) )
+                || DateUtil.trunc( dt1 ).equals( DateUtil.trunc( dt2 ) );
+    }
+
+    public static boolean after( final Date dt1, final Date dt2 ) {
+        return dt1 != null && dt2 != null && trunc( dt1 ).after( trunc( dt2 ) );
+    }
+
+    public static boolean afterComHora( final Date dt1, final Date dt2 ) {
+        if ( ( dt1 == null ) || ( dt2 == null ) ) {
+            return false;
+        }
+
+        return ( dt1.after( dt2 ) );
+    }
+
+
+    public static boolean beforeOrEquals( final Date dt1, final Date dt2 ) {
+        if ( ( dt1 == null ) || ( dt2 == null ) ) {
+            return false;
+        }
+        return DateUtil.trunc( dt1 ).before( DateUtil.trunc( dt2 ) )
+                || DateUtil.trunc( dt1 ).equals( DateUtil.trunc( dt2 ) );
+    }
+
+    public static Date trunc( final Date dt ) {
+        if ( dt == null ) {
+            return null;
+        }
+        Calendar c = DateUtil.obterCalendar( dt );
+        c.set( Calendar.HOUR_OF_DAY, 0 );
+        c.set( Calendar.MINUTE, 0 );
+        c.set( Calendar.SECOND, 0 );
+        c.set( Calendar.MILLISECOND, 0 );
+        return c.getTime();
+    }
 }
