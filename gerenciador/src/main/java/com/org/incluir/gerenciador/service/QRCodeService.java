@@ -1,7 +1,7 @@
 package com.org.incluir.gerenciador.service;
 
 import com.org.incluir.gerenciador.dto.QRCodeDTO;
-import com.org.incluir.gerenciador.errors.NotFoundError;
+import com.org.incluir.gerenciador.exceptions.NotFoundError;
 import com.org.incluir.gerenciador.model.Clazz;
 import com.org.incluir.gerenciador.model.QRCode;
 import com.org.incluir.gerenciador.repository.ClazzRepository;

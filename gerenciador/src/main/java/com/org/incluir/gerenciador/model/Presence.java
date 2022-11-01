@@ -19,7 +19,10 @@ public class Presence {
 
     @Id
     @Indexed(unique = true)
-    private Long id;
+    private String id;
+
+    private String key;
+
     @DBRef
     private QRCode qRCode;
     @DBRef
@@ -31,4 +34,5 @@ public class Presence {
     private Date endHour;
     private Boolean inConfirmation;
     private Boolean outConfirmation;
+    private Boolean confirmation;
 }

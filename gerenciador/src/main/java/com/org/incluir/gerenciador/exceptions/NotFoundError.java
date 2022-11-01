@@ -1,4 +1,4 @@
-package com.org.incluir.gerenciador.errors;
+package com.org.incluir.gerenciador.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

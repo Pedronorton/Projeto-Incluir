@@ -1,7 +1,7 @@
 package com.org.incluir.gerenciador.controller;
 
 import com.org.incluir.gerenciador.dto.QRCodeDTO;
-import com.org.incluir.gerenciador.errors.NotFoundError;
+import com.org.incluir.gerenciador.exceptions.NotFoundError;
 import com.org.incluir.gerenciador.model.QRCode;
 import com.org.incluir.gerenciador.service.QRCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
