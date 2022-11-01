@@ -1,9 +1,8 @@
 import Axios from "axios";
 
-const URL = "http://localhost:8081/api";
+const URL = "http://localhost:8080/api";
 
 class DataService {
-  //Grammar
   getAllClazz(authorization) {
     return Axios.get(`${URL}/clazz/`);
   }
@@ -18,6 +17,9 @@ class DataService {
   }
   getAllQRCode() {
     return Axios.get(`${URL}/qrcode/`);
+  }
+  getAllPresence() {
+    return Axios.get(`${URL}/presence/`);
   }
 }
 export default new DataService();
