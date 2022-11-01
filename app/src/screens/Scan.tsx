@@ -32,24 +32,27 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
         // }
         const supported = await Linking.canOpenURL(link);
 
-        if (supported) {
-            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-            // by some browser in the mobile
-            const splitLink = link.split('/');
-            let url = '';
-            for (let i = 0; i < splitLink.length - 1; i++) {
-                url += splitLink[i] + '/';
-            }
-            const data = {
-                idClazz: splitLink[splitLink.length - 1],
-                idUser: 'Aqui passa o id na mão mesmo, pegando do banco',
-                idQRCode: ''
-            };
-            await DataService.postPresence();
-            await Linking.openURL(url);
-        } else {
-            Alert.alert(`Don't know how to open this URL: ${link}`);
+        // if (supported) {
+        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+        // by some browser in the mobile
+        const splitLink = link.split('-');
+        const idQRCode = splitLink[0];
+        const idClazz = splitLink[1];
+        const data = {
+            idAula: idClazz,
+            idUser: '6341d49f37a70e556479c0eb',
+            idQRCode: idQRCode
+        };
+        try {
+            await DataService.postPresence(data);
+            Alert.alert('Presenca confirmada com sucesso');
+        } catch (e) {
+            Alert.alert('falha ao marcar presenca');
         }
+        // await Linking.openURL(url);
+        // } else {
+        //     Alert.alert(`Don't know how to open this URL: ${link}`);
+        // }
     };
 
     const requestCameraPermission = async () => {
