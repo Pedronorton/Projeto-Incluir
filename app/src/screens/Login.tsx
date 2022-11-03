@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ActivityInd
 import DataService from '../service/DataService';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export default function Login() {
     useEffect(() => {
         refreshToken();
     }, []);
+    const dispatch = useDispatch();
 
     const refreshToken = async () => {
         try {
@@ -42,6 +44,8 @@ export default function Login() {
                 password: password
             };
             const response = await DataService.login(data);
+            dispatch({ type: 'SET_USER', payload: { id: response.data.id, isAuth: true, name: response.data.name } });
+
             try {
                 await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
                 await AsyncStorage.setItem('@token', response.data.token);

@@ -4,13 +4,13 @@ import { Text, StyleSheet, Button, TouchableOpacity, Linking, Alert } from 'reac
 import { IStackScreenProps } from '../library/IStackScreenProps';
 import { IQRCodePayload } from '../library/IQRCodePayload';
 import DataService from '../service/DataService.js';
-
+import { useSelector } from 'react-redux';
 const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
     const [loading, setLoading] = useState(true);
     const [scanData, setScanData] = useState<IQRCodePayload>();
     const [permission, setPermission] = useState(true);
     const [link, setLink] = useState('');
-
+    const user = useSelector((states) => states);
     useEffect(() => {
         requestCameraPermission();
     }, []);
@@ -38,9 +38,11 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
         const splitLink = link.split('-');
         const idQRCode = splitLink[0];
         const idClazz = splitLink[1];
+        console.log('user', user);
+
         const data = {
             idAula: idClazz,
-            idUser: '6341d49f37a70e556479c0eb',
+            idUser: user.id,
             idQRCode: idQRCode
         };
         try {
@@ -96,8 +98,6 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
                     style={[styles.container]}
                     onBarCodeScanned={({ type, data }) => {
                         try {
-                            console.log(type);
-                            console.log(data);
                             // let _data = JSON.parse(data);
                             setLink(data);
                         } catch (error) {

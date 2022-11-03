@@ -8,10 +8,13 @@ import ScanScreen from './src/screens/Scan';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import SignUp from './src/screens/SignUp';
-
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import authReducer from './src/reducers/authReducer';
 const Stack = createStackNavigator();
 
 const Application = () => {
+    const Store = createStore(authReducer);
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
@@ -35,15 +38,17 @@ const Application = () => {
         }
     };
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name={'Login'} component={Login} />
-                <Stack.Screen name={'QRCode'} component={QRCodeScreen} />
-                <Stack.Screen name={'SignUp'} component={SignUp} />
-                <Stack.Screen name={'Scan'} component={ScanScreen} />
-            </Stack.Navigator>
-            <StatusBar style="auto" />
-        </NavigationContainer>
+        <Provider store={Store}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name={'Login'} component={Login} />
+                    <Stack.Screen name={'QRCode'} component={QRCodeScreen} />
+                    <Stack.Screen name={'SignUp'} component={SignUp} />
+                    <Stack.Screen name={'Scan'} component={ScanScreen} />
+                </Stack.Navigator>
+                <StatusBar style="auto" />
+            </NavigationContainer>
+        </Provider>
     );
 };
 

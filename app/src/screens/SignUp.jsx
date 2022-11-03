@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUp() {
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+
     const [password, setPassword] = useState('');
     const [responsibility, setResponsibility] = useState('');
     const [entryDate, setEntryDate] = useState('');
@@ -14,18 +16,21 @@ export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingRefreshToken, setIsLoadingRefreshToken] = useState(false);
 
-    const handleLogin = async () => {
+    const handleCreate = async () => {
         try {
             const data = {
+                name: name,
+                function: responsibility,
                 username: email,
                 password: password
             };
-            const response = await DataService.login(data);
+            const response = await DataService.signUp(data);
             try {
                 await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
                 await AsyncStorage.setItem('@token', response.data.token);
                 await AsyncStorage.setItem('@username', response.data.username);
                 navigation.navigate('QRCode');
+                dispatch({ type: 'LOGIN', payload: true });
             } catch (e) {
                 // saving error
             }
@@ -51,19 +56,17 @@ export default function SignUp() {
                     </View>
 
                     <View style={styles.inputView}>
+                        <TextInput style={styles.TextInput} placeholder="Nome." placeholderTextColor="#003f5c" onChangeText={(name) => setName(name)} />
+                    </View>
+
+                    <View style={styles.inputView}>
                         <TextInput style={styles.TextInput} placeholder="Password." placeholderTextColor="#003f5c" secureTextEntry={true} onChangeText={(password) => setPassword(password)} />
                     </View>
                     <View style={styles.inputView}>
-                        <TextInput
-                            style={styles.TextInput}
-                            placeholder="Cargo."
-                            placeholderTextColor="#003f5c"
-                            secureTextEntry={true}
-                            onChangeText={(responsibility) => setResponsibility(responsibility)}
-                        />
+                        <TextInput style={styles.TextInput} placeholder="Cargo." placeholderTextColor="#003f5c" onChangeText={(responsibility) => setResponsibility(responsibility)} />
                     </View>
 
-                    <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                    <TouchableOpacity style={styles.loginBtn} onPress={handleCreate}>
                         <Text>Criar</Text>
                     </TouchableOpacity>
                 </>
