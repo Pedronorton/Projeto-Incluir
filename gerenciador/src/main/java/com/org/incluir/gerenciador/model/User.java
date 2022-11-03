@@ -41,6 +41,8 @@ public class User {
 
     private Date departureDate;
 
+    private String function;
+
     @DBRef
     private Set<Role> roles = new HashSet<>();
 

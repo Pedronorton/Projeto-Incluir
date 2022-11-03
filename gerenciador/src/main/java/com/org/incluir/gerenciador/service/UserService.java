@@ -1,5 +1,6 @@
 package com.org.incluir.gerenciador.service;
 
+import com.org.incluir.gerenciador.dto.UserDTO;
 import com.org.incluir.gerenciador.model.ERole;
 import com.org.incluir.gerenciador.model.Role;
 import com.org.incluir.gerenciador.model.User;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -24,14 +26,22 @@ public class UserService {
     @Autowired
     private SequenceGeneratorService seqService;
 
-    public void saveUser(User user) {
+    public User saveUser(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setPassword(userDTO.getPassword());
+        user.setEmail(userDTO.getUsername());
+        user.setUsername(userDTO.getUsername());
+        user.setFunction(userDTO.getFunction());
+
         User usr = usrRepo.findByEmail(user.getEmail());
         if (usr == null) {
             usr = new User();
             usr.setName(user.getName());
             usr.setUsername(user.getEmail());
             usr.setEmail(user.getEmail());
-
+            usr.setFunction(user.getFunction());
+            usr.setActive(true);
             Set<Role> roles = new HashSet<>();
 
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -40,15 +50,14 @@ public class UserService {
             usr.setRoles(roles);
 
             usr.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-//            usr.setAutho(user.getPassword());
-
-//            if (usrRepo.count() == 0L) {
-//                usr.setId(0L);
-//            } else {
-//                Long lastPos = usrRepo.count();
-//                usr.setId(lastPos);
-//            }
             usrRepo.save(usr);
+            return usr;
         }
+        return null;
     }
+
+    public List<User> getAll(){
+        return usrRepo.findAll();
+    }
+
 }

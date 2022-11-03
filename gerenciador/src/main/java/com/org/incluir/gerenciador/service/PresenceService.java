@@ -52,9 +52,17 @@ public class PresenceService {
             String key = qrCode.get().getId()+'-'+clazz.get().getId()+"-"+user.get().getId();
             Optional<Presence> presence = presenceRepository.findByKey(key);
             if(presence.isPresent()){
-                presence.get().setEndHour(new Date());
+                Date endDate = new Date();
+                Double hours = user.get().getRegisteredHours();
+                if (hours == null){
+                    hours = 0d;
+                }
+                presence.get().setEndHour(endDate);
                 presence.get().setOutConfirmation(true);
                 presence.get().setConfirmation(true);
+                Double minutes = DateUtil.obterDiferencaMinutosDouble(endDate, presence.get().getStartedHour());
+                user.get().setRegisteredHours(hours + minutes/60);
+                userRepository.save(user.get());
                 presenceRepository.save(presence.get());
                 return presence.get();
             }else{

@@ -81,4 +81,26 @@ public class DateUtil {
         c.set( Calendar.MILLISECOND, 0 );
         return c.getTime();
     }
+
+
+    public static Long obterDiferencaMinutos(Date data1, Date data2){
+        return obterDiferencaDatasEmMillis( data1, data2 )/ (60 * 1000);
+    }
+
+    public static Double obterDiferencaMinutosDouble(Date data1, Date data2){
+        return obterDiferencaDatasEmMillis( data1, data2 ).doubleValue() / (60.0 * 1000.0);
+    }
+
+    public static Long obterDiferencaHoras(Date data1, Date data2){
+        return obterDiferencaDatasEmMillis( data1, data2 ) / (60 * 60 * 1000);
+    }
+
+    private static Long obterDiferencaDatasEmMillis( Date data1, Date data2 ){
+        if (data1 == null || data2 == null){
+            return null;
+        }
+        else{
+            return data1.getTime() - data2.getTime();
+        }
+    }
 }
