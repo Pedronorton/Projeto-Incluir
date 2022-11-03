@@ -53,6 +53,8 @@ export default function Presence() {
     }
   };
 
+  const formatDate = () => {};
+
   const createRows = () => {
     let list = [];
     console.log(listPresence);
@@ -70,12 +72,19 @@ export default function Presence() {
           ":" +
           String(finalDate.getMinutes()).padStart(2, "0");
       }
+      const day =
+        String(initialDate.getDate()).padStart(2, "0") +
+        "/" +
+        String(initialDate.getMonth()).padStart(2, "0") +
+        "/" +
+        String(initialDate.getFullYear()).padStart(2, "0");
       const data = {
         id: element.id,
-        name: element.user.username,
+        name: element.user.name,
         startHour: initialHour + "h",
         endHour: finalHour != "-" ? finalHour + "h" : "-",
         clazz: element.clazz.name,
+        day: day,
         place: element.clazz.place,
         confirmation: element.confirmation,
       };
@@ -95,6 +104,7 @@ export default function Presence() {
                   <TableCell>Nome</TableCell>
                   <TableCell align="center">Aula</TableCell>
                   <TableCell align="center">Sala</TableCell>
+                  <TableCell align="center">Dia</TableCell>
                   <TableCell align="center">Horário de entrada</TableCell>
                   <TableCell align="center">Horário de saída</TableCell>
                   <TableCell align="center">Confirmação</TableCell>
@@ -111,6 +121,7 @@ export default function Presence() {
                     </TableCell>
                     <TableCell align="center">{row.clazz}</TableCell>
                     <TableCell align="center">{row.place}</TableCell>
+                    <TableCell align="center">{row.day}</TableCell>
                     <TableCell align="center">{row.startHour}</TableCell>
                     <TableCell align="center">{row.endHour}</TableCell>
                     <TableCell align="center">

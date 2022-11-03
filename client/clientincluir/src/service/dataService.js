@@ -21,5 +21,8 @@ class DataService {
   getAllPresence() {
     return Axios.get(`${URL}/presence/`);
   }
+  getAllUsers() {
+    return Axios.get(`${URL}/user/`);
+  }
 }
 export default new DataService();
