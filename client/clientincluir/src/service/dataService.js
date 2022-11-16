@@ -3,6 +3,10 @@ import Axios from "axios";
 const URL = "http://localhost:8080/api";
 
 class DataService {
+  login(data) {
+    return Axios.post(`${URL}/auth/signin`, data);
+  }
+
   getAllClazz(authorization) {
     return Axios.get(`${URL}/clazz/`);
   }
