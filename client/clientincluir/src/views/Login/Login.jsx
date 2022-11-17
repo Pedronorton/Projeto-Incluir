@@ -26,7 +26,7 @@ import { useEffect } from "react";
 // import alertConstants from "../../constants/Feedback/alert";
 import { TextField, Button, InputAdornment } from "@mui/material";
 import { useAlert } from "../../context/Feedback/alertContext";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 // import ErrorIcon from "@mui/icons-material/Error";
 
 // import { withRouter } from "react-router";
@@ -90,12 +90,13 @@ export default function Login() {
         };
 
         const responseUser = await DataService.login(data);
-        console.log(responseUser);
         setCredential(responseUser.headers.authorization);
-        // setUser(response.data);
+        console.log(responseUser);
+        console.log(responseUser.headers.authorization);
+        setUser(responseUser.data);
         // checkAdmin(response.data);
-        Cookie.set("userMail", mail);
-        Cookie.set("token", responseUser.headers.authorization);
+        Cookies.set("userMail", mail);
+        Cookies.set("token", responseUser.headers.authorization);
         setIsAuth(true);
         setLoading(false);
         history("/");
@@ -121,8 +122,8 @@ export default function Login() {
         // icon: ErrorIcon,
       });
 
-      Cookie.remove("token");
-      Cookie.remove("userMail");
+      Cookies.remove("token");
+      Cookies.remove("userMail");
     }
   };
   const handleSendNewPassword = async () => {
@@ -175,27 +176,34 @@ export default function Login() {
         direction="column"
         item
         xs={4}
-        style={{ backgroundColor: "#313040", borderRadius: 20 }}
+        style={{
+          backgroundColor: "#313040",
+          borderRadius: 20,
+          paddingBottom: "2rem",
+        }}
       >
         <div className="wrapper-login">
-          {/* <h4 style={{ color: "white" }}>LFAWeb</h4> */}
+          <h2 style={{ color: "white" }}>Projeto Incluir</h2>
           {/* <img src={logo}></img> */}
         </div>
         {/* <Loading loading={loading} /> */}
         <div className="wrapper-inputs">
           {/* <ThemeProvider theme={theme.themeInput}> */}
+
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Email"
             variant="outlined"
             error={errorMail}
+            style={{ paddingBottom: 10 }}
+            sx={{ color: "white" }}
             onChange={(el) => {
               setMail(el.target.value);
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <MailIcon />
+                  <MailIcon sx={{ color: "white" }} />
                 </InputAdornment>
               ),
             }}
@@ -211,11 +219,12 @@ export default function Login() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon />
+                  <LockIcon sx={{ color: "white" }} />
                 </InputAdornment>
               ),
             }}
           />
+
           {/* </ThemeProvider> */}
           <div className="forget-pass">
             <h3
@@ -232,17 +241,16 @@ export default function Login() {
           </div>
         </div>
 
-        {/* <ThemeProvider theme={theme.themeButton}> */}
-        <Button style={{ width: "80%" }} onClick={handleLogin}>
+        <Button
+          style={{ width: "80%" }}
+          onClick={handleLogin}
+          sx={{
+            color: "black",
+            backgroundColor: "#7DC78D",
+          }}
+        >
           Login
         </Button>
-        {/* </ThemeProvider> */}
-        {/* <div className="div-span-login">
-          <span>
-            sasas
-            <span style={{ color: "#7DC78D" }}>dsadsadsa</span> fdsfdsfds
-          </span>
-        </div> */}
       </Grid>
     </div>
   );

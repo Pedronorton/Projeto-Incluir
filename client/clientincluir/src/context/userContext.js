@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 const UserContext = createContext();
 
 export default function UserProvider({ children }) {
@@ -18,7 +18,7 @@ export default function UserProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isActiveDialogHowToUseGrammar, setActiveDialogHowToUseGrammar] =
     useState(false);
-  const [isAuth, setIsAuth] = useState(!!Cookie.get("token"));
+  const [isAuth, setIsAuth] = useState(!!Cookies.get("token"));
 
   return (
     <UserContext.Provider
