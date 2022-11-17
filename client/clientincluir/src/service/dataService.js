@@ -6,6 +6,9 @@ class DataService {
   login(data) {
     return Axios.post(`${URL}/auth/signin`, data);
   }
+  signUp(data) {
+    return Axios.post(`${URL}/user/signUp`, data);
+  }
 
   getAllClazz(authorization) {
     return Axios.get(`${URL}/clazz/`);

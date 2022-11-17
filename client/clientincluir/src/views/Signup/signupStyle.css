@@ -1,0 +1,55 @@
+.container {
+  /* height: 100% !important; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(49, 48, 64, 0.9);
+  /* width: 25%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column; */
+}
+.wrapper-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.wrapper {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.input {
+  margin: 5px;
+}
+.MuiTextField-root {
+  width: 100% !important;
+}
+.MuiFormLabel-root {
+  color: white !important;
+}
+.wrapper-inputs {
+  width: 80%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.forget-pass {
+  margin-bottom: 1em;
+}
+.forget-pass > h3:hover {
+  text-decoration: underline;
+}
+.div-span-login {
+  width: 80%;
+  display: flex;
+  text-align: justify;
+}
+.div-span-login > span {
+  color: white;
+  font-size: 12px;
+}

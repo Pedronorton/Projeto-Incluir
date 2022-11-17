@@ -4,6 +4,7 @@ import ClazzTime from "../views/ClazzTime";
 import Dashboard from "../views/Dashboard";
 import Login from "../views/Login/Login";
 import Presence from "../views/Presence/Presence";
+import SignUp from "../views/Signup/SignUp";
 import Users from "../views/Users";
 
 import { Privateroute } from "./PrivateRoute";
@@ -52,7 +53,8 @@ export function Rotas() {
             </Privateroute>
           }
         />
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );

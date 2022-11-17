@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 // import { makeStyles } from "@material-ui/core/styles";
 // import styles from "./LoginStyle";
-import "./loginStyle.css";
+import "./signupStyle.css";
 import MailIcon from "@mui/icons-material/Mail";
 
 import LockIcon from "@material-ui/icons/Lock";
@@ -24,7 +24,7 @@ import { useEffect } from "react";
 //contants
 // import constants from "../../constants/Login/login";
 // import alertConstants from "../../constants/Feedback/alert";
-import { TextField, Button, InputAdornment } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { useAlert } from "../../context/Feedback/alertContext";
 import Cookies from "js-cookie";
 // import ErrorIcon from "@mui/icons-material/Error";
@@ -32,44 +32,17 @@ import Cookies from "js-cookie";
 // import { withRouter } from "react-router";
 // const useStyles = makeStyles(styles);
 // import darkGray from "../../constants/colors";
-export default function Login() {
+export default function SignUp() {
   const [mail, setMail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [userFunction, setUserFunction] = useState("");
+
+  const [loading, setLoading] = useState(false);
   const { setCredential, setUser, language, setIsAuth, setIsAdmin } = useUser();
   const { setAlert } = useAlert();
   const [errorMail, setErrorMail] = useState(false);
   const history = useNavigate();
-
-  useEffect(() => {
-    if (mail) {
-      try {
-        let arroba = mail.split("@");
-
-        if (arroba.length === 2) {
-          let point = arroba[1].split(".");
-
-          if (point.length >= 2 && point[1] !== "" && point[1] !== " ") {
-            // Confirma se email existe no Login
-            setErrorMail(false);
-          } else setErrorMail(true);
-        } else setErrorMail(true);
-      } catch (e) {
-        alert(e);
-      }
-    } else {
-      setErrorMail(false);
-    }
-  }, [mail]);
-
-  const checkAdmin = (data) => {
-    for (let i = 0; i < data.roles.length; i++) {
-      const element = data.roles[i];
-      if (element.name === "ROLE_ADMIN") {
-        setIsAdmin(true);
-      }
-    }
-  };
 
   const handleLogin = async () => {
     try {
@@ -91,8 +64,6 @@ export default function Login() {
 
         const responseUser = await DataService.login(data);
         setCredential(responseUser.headers.authorization);
-        console.log(responseUser);
-        console.log(responseUser.headers.authorization);
         setUser(responseUser.data);
         // checkAdmin(response.data);
         Cookies.set("userMail", mail);
@@ -126,43 +97,30 @@ export default function Login() {
       Cookies.remove("userMail");
     }
   };
-  const handleSendNewPassword = async () => {
-    if (!errorMail && mail.length > 0) {
-      try {
-        // setLoading(true);
-        await DataService.forgotPass(mail);
-        // setLoading(false);
-        // setAlert({
-        //   active: true,
-        //   text: "Teste3",
 
-        //   color: "info",
-        //   sevarity: "info",
-        //   icon: ErrorIcon,
-        // });
-      } catch (e) {
-        // setLoading(false);
-        // setAlert({
-        //   active: true,
-        //   text: "Teste4",
-        //   color: "error",
-        //   sevarity: "error",
-        //   icon: ErrorIcon,
-        // });
-      }
-    } else {
-      //   setAlert({
-      //     active: true,
-      //     text: "Teste5",
-      //     color: "info",
-      //     sevarity: "info",
-      //     icon: ErrorIcon,
-      //   });
-    }
-  };
   const _handleKeyDown = (event) => {
     if (event.key === "Enter") {
       handleLogin();
+    }
+  };
+
+  const handleCreateUser = async () => {
+    const data = {
+      name: name,
+      function: userFunction,
+      username: mail,
+      password: password,
+    };
+    try {
+      const response = await DataService.signUp(data);
+
+      Cookies.set("refreshToken", response.data.refreshToken);
+      Cookies.set("@token", response.data.token);
+      Cookies.set("@username", response.data.username);
+      handleLogin();
+    } catch (e) {
+      // saving error
+      alert(e);
     }
   };
 
@@ -183,7 +141,7 @@ export default function Login() {
         }}
       >
         <div className="wrapper-login">
-          <h2 style={{ color: "white" }}>Projeto Incluir</h2>
+          <h2 style={{ color: "white" }}>Cadastro</h2>
           {/* <img src={logo}></img> */}
         </div>
         {/* <Loading loading={loading} /> */}
@@ -192,76 +150,54 @@ export default function Login() {
 
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
+            label="Nome"
+            variant="outlined"
+            style={{ paddingBottom: 10 }}
+            sx={{ color: "white" }}
+            onChange={(el) => {
+              setName(el.target.value);
+            }}
+          />
+          <TextField
+            onKeyDown={(event) => _handleKeyDown(event)}
             label="Email"
             variant="outlined"
             error={errorMail}
             style={{ paddingBottom: 10 }}
-            sx={{ color: "white" }}
             onChange={(el) => {
               setMail(el.target.value);
             }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <MailIcon sx={{ color: "white" }} />
-                </InputAdornment>
-              ),
+          />
+          <TextField
+            onKeyDown={(event) => _handleKeyDown(event)}
+            label="Função"
+            variant="outlined"
+            style={{ paddingBottom: 10 }}
+            onChange={(el) => {
+              setUserFunction(el.target.value);
             }}
           />
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Senha"
             variant="outlined"
+            style={{ paddingBottom: 10 }}
             type="password"
             onChange={(el) => {
               setPassword(el.target.value);
             }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon sx={{ color: "white" }} />
-                </InputAdornment>
-              ),
-            }}
           />
-
-          {/* </ThemeProvider> */}
-          <div className="forget-pass">
-            <h3
-              onClick={handleSendNewPassword}
-              style={{
-                marginTop: 0,
-                fontSize: 12,
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
-              Esqueci minha senha
-            </h3>
-          </div>
         </div>
 
         <Button
           style={{ width: "80%", marginBottom: 10 }}
-          onClick={handleLogin}
+          onClick={handleCreateUser}
           sx={{
             color: "black",
             backgroundColor: "#7DC78D",
           }}
         >
-          Login
-        </Button>
-        <Button
-          style={{ width: "80%" }}
-          onClick={() => {
-            history("/signup");
-          }}
-          sx={{
-            color: "black",
-            backgroundColor: "#7DC78D",
-          }}
-        >
-          Registrar
+          Criar
         </Button>
       </Grid>
     </div>
