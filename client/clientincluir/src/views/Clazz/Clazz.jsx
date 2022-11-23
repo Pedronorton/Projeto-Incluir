@@ -172,12 +172,12 @@ export default function Clazz() {
     <div>
       <div>
         <div>
-          <div>
+          <div className="button-container">
             <Button
               variant="contained"
-              color="success"
               className="button"
               onClick={handleClickOpen}
+              style={{ backgroundColor: '#F36F21'}}
             >
               Adicionar
             </Button>
@@ -185,7 +185,7 @@ export default function Clazz() {
               document={<QRCodeDocument obj={QRCode} />}
               fileName="qrcode.pdf"
             >
-              <Button variant="contained" color="success" className="button">
+              <Button variant="contained" className="button" style={{ backgroundColor: '#F36F21' }}>
                 Download
               </Button>
             </PDFDownloadLink>
@@ -290,6 +290,7 @@ export default function Clazz() {
                     <TableCell align="center">
                       <Button
                         variant="contained"
+                        style={{ backgroundColor: '#F9A61A' }}
                         onClick={() => {
                           generateQRCode(row.id);
                         }}

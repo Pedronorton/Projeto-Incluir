@@ -86,7 +86,7 @@ export default function Users() {
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
-              <TableCell align="center">Funçao</TableCell>
+              <TableCell align="center">Função</TableCell>
               <TableCell align="center">Horas registradas</TableCell>
             </TableRow>
           </TableHead>
