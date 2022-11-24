@@ -177,13 +177,13 @@ export default function Login() {
         item
         xs={4}
         style={{
-          backgroundColor: "#313040",
+          backgroundColor: "white",
           borderRadius: 20,
           paddingBottom: "2rem",
         }}
       >
         <div className="wrapper-login">
-          <h2 style={{ color: "white" }}>Projeto Incluir</h2>
+          <h2 style={{ color: "#F9A61A" }}>Projeto Incluir</h2>
           {/* <img src={logo}></img> */}
         </div>
         {/* <Loading loading={loading} /> */}
@@ -196,14 +196,14 @@ export default function Login() {
             variant="outlined"
             error={errorMail}
             style={{ paddingBottom: 10 }}
-            sx={{ color: "white" }}
+            sx={{ color: "secondary" }}
             onChange={(el) => {
               setMail(el.target.value);
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <MailIcon sx={{ color: "white" }} />
+                  <MailIcon />
                 </InputAdornment>
               ),
             }}
@@ -219,7 +219,7 @@ export default function Login() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon sx={{ color: "white" }} />
+                  <LockIcon/>
                 </InputAdornment>
               ),
             }}
@@ -232,7 +232,7 @@ export default function Login() {
               style={{
                 marginTop: 0,
                 fontSize: 12,
-                color: "white",
+                color: "#F9A61A",
                 cursor: "pointer",
               }}
             >
@@ -245,8 +245,8 @@ export default function Login() {
           style={{ width: "80%", marginBottom: 10 }}
           onClick={handleLogin}
           sx={{
-            color: "black",
-            backgroundColor: "#7DC78D",
+            color: "white",
+            backgroundColor: "#F36F21",
           }}
         >
           Login
@@ -257,8 +257,8 @@ export default function Login() {
             history("/signup");
           }}
           sx={{
-            color: "black",
-            backgroundColor: "#7DC78D",
+            color: "white",
+            backgroundColor: "#F36F21",
           }}
         >
           Registrar
