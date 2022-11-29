@@ -12,7 +12,7 @@ const QRCodeScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
         <View style={styles.container}>
             <QRCode value={JSON.stringify(payload)} />
             <View style={styles.button}>
-                <Button title="Go to Scanner" onPress={() => navigation.navigate('Scan')} />
+                <Button title="Scan" onPress={() => navigation.navigate('Scan')} />
             </View>
         </View>
     );

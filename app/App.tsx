@@ -25,14 +25,6 @@ const Application = () => {
         try {
             const storageToken = await AsyncStorage.getItem('@token');
             const storageMail = await AsyncStorage.getItem('@userMail');
-            console.log('fetch');
-
-            if (storageToken !== null && storageMail != null) {
-                console.log('entrou');
-            } else {
-                setAuth(true);
-                console.log('erro ao logar');
-            }
         } catch (e) {
             console.log('erro ao logar');
         }
@@ -42,7 +34,13 @@ const Application = () => {
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name={'Login'} component={Login} />
-                    <Stack.Screen name={'QRCode'} component={QRCodeScreen} />
+                    <Stack.Screen
+                        name={'QRCode'}
+                        component={QRCodeScreen}
+                        options={{
+                            headerLeft: null
+                        }}
+                    />
                     <Stack.Screen name={'SignUp'} component={SignUp} />
                     <Stack.Screen name={'Scan'} component={ScanScreen} />
                 </Stack.Navigator>

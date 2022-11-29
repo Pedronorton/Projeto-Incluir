@@ -51,10 +51,8 @@ function QRCodePage({ qrcode }) {
   const id = qrcode.id;
   const { name, place } = qrcode.clazz;
   const hour = formatDate(qrcode.clazz.initialHour, qrcode.clazz.finalHour);
-  console.log("id", id);
   if (id != null) {
     if (document.getElementById(id) != null) {
-      console.log("element", document.getElementById(id));
       dataUrl = document.getElementById(id).toDataURL();
     }
   }
@@ -90,7 +88,7 @@ function QRCodeDocument({ obj, row }) {
   return (
     <Document>
       {ids.map((qrcode) => (
-        <QRCodePage qrcode={qrcode} />
+        <QRCodePage key={qrcode.id} qrcode={qrcode} />
       ))}
     </Document>
   );
