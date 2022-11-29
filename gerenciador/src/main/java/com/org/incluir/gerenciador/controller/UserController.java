@@ -6,10 +6,7 @@ import com.org.incluir.gerenciador.model.User;
 import com.org.incluir.gerenciador.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +32,13 @@ public class UserController {
         List<User> list = userService.getAll();
 
         return ResponseEntity.ok(list);
+    }
+
+    @RequestMapping(value = "/{email}", method = RequestMethod.GET)
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email){
+        User user = userService.findByEmail(email);
+
+        return ResponseEntity.ok(user);
     }
 
 }

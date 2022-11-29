@@ -1,10 +1,10 @@
 import Axios from 'axios';
 
-const URL = 'http://192.168.0.109:8080/api';
+const URL = 'http://192.168.0.108:8080/api';
 
 class DataService {
-    postPresence(data) {
-        return Axios.post(`${URL}/presence/markPresence`, data);
+    postPresence(data, cred) {
+        return Axios.post(`${URL}/presence/markPresence`, data, cred);
     }
     login(data) {
         return Axios.post(`${URL}/auth/signin`, data);
@@ -14,6 +14,9 @@ class DataService {
     }
     refreshToken(data) {
         return Axios.post(`${URL}/auth/refreshtoken`, data);
+    }
+    getUserByEmail(email, cred) {
+        return Axios.get(`${URL}/user/${email}`, cred);
     }
 }
 

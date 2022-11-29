@@ -17,8 +17,11 @@ import {
   TableHead,
   TableRow,
   TextField,
+  InputAdornment,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import ClassIcon from "@mui/icons-material/Class";
+import PlaceIcon from "@mui/icons-material/Place";
 import DataService from "../../service/dataService.js";
 // import QRCodeCanvas from "../QRCodeCanvas.jsx";
 import { QRCodeCanvas } from "qrcode.react";
@@ -27,6 +30,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import QRCodeDocument from "../../components/QRCodeDocument";
 
 import "./clazz.css";
+import Cookies from "js-cookie";
 export default function Clazz() {
   const [listClazz, setListClazz] = useState([]);
   const [name, setName] = useState("");
@@ -50,7 +54,13 @@ export default function Clazz() {
   const fetchQRCodes = async () => {
     try {
       const obj = {};
-      const response = await DataService.getAllQRCode();
+      const storageToken = Cookies.get("token");
+
+      const response = await DataService.getAllQRCode({
+        headers: {
+          Authorization: storageToken,
+        },
+      });
       response.data.forEach((element) => {
         const key = element.key.split("-")[0];
         obj[key] = element;
@@ -75,7 +85,13 @@ export default function Clazz() {
 
   const getAllClazz = async () => {
     try {
-      const response = await DataService.getAllClazz();
+      const storageToken = Cookies.get("token");
+
+      const response = await DataService.getAllClazz({
+        headers: {
+          Authorization: storageToken,
+        },
+      });
 
       setListClazz(response.data);
     } catch (e) {
@@ -127,7 +143,13 @@ export default function Clazz() {
     };
     try {
       // await DataService.getQRCodeByKey(key);
-      const response = await DataService.postQRCode(data);
+      const storageToken = Cookies.get("token");
+
+      const response = await DataService.postQRCode(data, {
+        headers: {
+          Authorization: storageToken,
+        },
+      });
       let obj = { ...QRCode };
       const qrCode = response.data;
       console.log(response.data);
@@ -160,7 +182,13 @@ export default function Clazz() {
     }
 
     try {
-      const response = await DataService.postClazz(data);
+      const storageToken = Cookies.get("token");
+      console.log(data);
+      const response = await DataService.postClazz(data, {
+        headers: {
+          Authorization: storageToken,
+        },
+      });
       list.push(response.data);
       setListClazz(list);
     } catch (e) {
@@ -177,7 +205,7 @@ export default function Clazz() {
               variant="contained"
               className="button"
               onClick={handleClickOpen}
-              style={{ backgroundColor: '#F36F21'}}
+              style={{ backgroundColor: "#F36F21" }}
             >
               Adicionar
             </Button>
@@ -185,7 +213,11 @@ export default function Clazz() {
               document={<QRCodeDocument obj={QRCode} />}
               fileName="qrcode.pdf"
             >
-              <Button variant="contained" className="button" style={{ backgroundColor: '#F36F21' }}>
+              <Button
+                variant="contained"
+                className="button"
+                style={{ backgroundColor: "#F36F21" }}
+              >
                 Download
               </Button>
             </PDFDownloadLink>
@@ -199,6 +231,7 @@ export default function Clazz() {
               </DialogContentText> */}
               <TextField
                 autoFocus
+                placeholder="Nome"
                 margin="dense"
                 id="name"
                 label="Nome"
@@ -206,9 +239,17 @@ export default function Clazz() {
                 fullWidth
                 variant="standard"
                 onChange={(el) => setName(el.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <ClassIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 autoFocus
+                placeholder="Local"
                 margin="dense"
                 id="place"
                 label="Sala"
@@ -216,6 +257,13 @@ export default function Clazz() {
                 fullWidth
                 variant="standard"
                 onChange={(el) => setPlace(el.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PlaceIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
               <div className="div-radios">
                 <FormControl>
@@ -252,7 +300,7 @@ export default function Clazz() {
                     <FormControlLabel
                       value="tenClock"
                       control={<Radio />}
-                      label="10:00h - 12:30h"
+                      label="10:30h - 12:30h"
                     />
                   </RadioGroup>
                 </FormControl>
@@ -290,7 +338,7 @@ export default function Clazz() {
                     <TableCell align="center">
                       <Button
                         variant="contained"
-                        style={{ backgroundColor: '#F9A61A' }}
+                        style={{ backgroundColor: "#F9A61A" }}
                         onClick={() => {
                           generateQRCode(row.id);
                         }}

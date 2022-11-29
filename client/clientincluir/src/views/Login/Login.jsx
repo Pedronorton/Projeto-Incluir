@@ -90,13 +90,16 @@ export default function Login() {
         };
 
         const responseUser = await DataService.login(data);
-        setCredential(responseUser.headers.authorization);
-        console.log(responseUser);
-        console.log(responseUser.headers.authorization);
+        setCredential("Bearer " + responseUser.data.token);
+
         setUser(responseUser.data);
         // checkAdmin(response.data);
         Cookies.set("userMail", mail);
-        Cookies.set("token", responseUser.headers.authorization);
+        Cookies.set("token", "Bearer " + responseUser.data.token);
+        // await AsyncStorage.setItem(
+        //   "@token",
+        //   "Bearer " + response.data.accessToken
+        // );
         setIsAuth(true);
         setLoading(false);
         history("/");
@@ -193,6 +196,7 @@ export default function Login() {
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Email"
+            placeholder="Email"
             variant="outlined"
             error={errorMail}
             style={{ paddingBottom: 10 }}
@@ -211,6 +215,7 @@ export default function Login() {
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Senha"
+            placeholder="Senha"
             variant="outlined"
             type="password"
             onChange={(el) => {
@@ -219,7 +224,7 @@ export default function Login() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon/>
+                  <LockIcon />
                 </InputAdornment>
               ),
             }}
@@ -236,13 +241,14 @@ export default function Login() {
                 cursor: "pointer",
               }}
             >
-              Esqueci minha senha
+              {/* Esqueci minha senha */}
             </h3>
           </div>
         </div>
 
         <Button
           style={{ width: "80%", marginBottom: 10 }}
+          className="login-buttons"
           onClick={handleLogin}
           sx={{
             color: "white",
@@ -253,6 +259,7 @@ export default function Login() {
         </Button>
         <Button
           style={{ width: "80%" }}
+          className="login-buttons"
           onClick={() => {
             history("/signup");
           }}

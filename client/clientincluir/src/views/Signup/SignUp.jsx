@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 // import Container from "@material-ui/core/Container";
 
 // import { makeStyles } from "@material-ui/core/styles";
-// import styles from "./LoginStyle";
 import "./signupStyle.css";
 import MailIcon from "@mui/icons-material/Mail";
-
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import WorkIcon from "@material-ui/icons/Work";
 import LockIcon from "@material-ui/icons/Lock";
 // import Loading from "components/Loading/loading";
 import DataService from "../../service/dataService";
@@ -24,7 +24,8 @@ import { useEffect } from "react";
 //contants
 // import constants from "../../constants/Login/login";
 // import alertConstants from "../../constants/Feedback/alert";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, InputAdornment } from "@mui/material";
+
 import { useAlert } from "../../context/Feedback/alertContext";
 import Cookies from "js-cookie";
 // import ErrorIcon from "@mui/icons-material/Error";
@@ -135,13 +136,13 @@ export default function SignUp() {
         item
         xs={4}
         style={{
-          backgroundColor: "#313040",
+          backgroundColor: "white",
           borderRadius: 20,
           paddingBottom: "2rem",
         }}
       >
         <div className="wrapper-login">
-          <h2 style={{ color: "white" }}>Cadastro</h2>
+          <h2 style={{ color: "#F9A61A" }}>Cadastro</h2>
           {/* <img src={logo}></img> */}
         </div>
         {/* <Loading loading={loading} /> */}
@@ -151,50 +152,83 @@ export default function SignUp() {
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Nome"
+            placeholder="Nome"
             variant="outlined"
             style={{ paddingBottom: 10 }}
-            sx={{ color: "white" }}
+            sx={{ color: "secondary" }}
             onChange={(el) => {
               setName(el.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBoxIcon />
+                </InputAdornment>
+              ),
             }}
           />
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Email"
+            placeholder="Email"
             variant="outlined"
             error={errorMail}
             style={{ paddingBottom: 10 }}
             onChange={(el) => {
               setMail(el.target.value);
             }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MailIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Função"
+            placeholder="Função"
             variant="outlined"
             style={{ paddingBottom: 10 }}
             onChange={(el) => {
               setUserFunction(el.target.value);
             }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <WorkIcon />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             onKeyDown={(event) => _handleKeyDown(event)}
             label="Senha"
+            placeholder="Senha"
             variant="outlined"
             style={{ paddingBottom: 10 }}
             type="password"
             onChange={(el) => {
               setPassword(el.target.value);
             }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon />
+                </InputAdornment>
+              ),
+            }}
           />
         </div>
 
         <Button
           style={{ width: "80%", marginBottom: 10 }}
+          className="button-create-user"
           onClick={handleCreateUser}
           sx={{
-            color: "black",
-            backgroundColor: "#7DC78D",
+            color: "white",
+            backgroundColor: "#F36F21",
           }}
         >
           Criar

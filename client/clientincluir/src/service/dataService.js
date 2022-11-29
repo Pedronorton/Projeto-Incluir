@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const URL = "http://localhost:8081/api";
+const URL = "http://localhost:8080/api";
 
 class DataService {
   login(data) {
@@ -9,27 +9,30 @@ class DataService {
   signUp(data) {
     return Axios.post(`${URL}/user/signUp`, data);
   }
+  getAllUsers(cred) {
+    return Axios.get(`${URL}/user/`, cred);
+  }
+  getUserByEmail(email, cred) {
+    return Axios.get(`${URL}/user/${email}`, cred);
+  }
 
-  getAllClazz(authorization) {
-    return Axios.get(`${URL}/clazz/`);
+  getAllClazz(cred) {
+    return Axios.get(`${URL}/clazz/`, cred);
   }
-  postClazz(data) {
-    return Axios.post(`${URL}/clazz/`, data);
+  postClazz(data, cred) {
+    return Axios.post(`${URL}/clazz/`, data, cred);
   }
-  postQRCode(data) {
-    return Axios.post(`${URL}/qrcode/`, data);
+  postQRCode(data, cred) {
+    return Axios.post(`${URL}/qrcode/`, data, cred);
   }
-  getQRCodeByKey(link) {
-    return Axios.get(link);
+  getQRCodeByKey(link, cred) {
+    return Axios.get(link, cred);
   }
-  getAllQRCode() {
-    return Axios.get(`${URL}/qrcode/`);
+  getAllQRCode(cred) {
+    return Axios.get(`${URL}/qrcode/`, cred);
   }
-  getAllPresence() {
-    return Axios.get(`${URL}/presence/`);
-  }
-  getAllUsers() {
-    return Axios.get(`${URL}/user/`);
+  getAllPresence(cred) {
+    return Axios.get(`${URL}/presence/`, cred);
   }
 }
 export default new DataService();

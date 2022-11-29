@@ -53,3 +53,6 @@
   color: white;
   font-size: 12px;
 }
+.login-buttons:hover {
+  background-color: rgba(243, 111, 33, 0.5) !important;
+}

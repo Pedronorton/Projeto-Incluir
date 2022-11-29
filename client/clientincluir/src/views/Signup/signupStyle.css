@@ -53,3 +53,7 @@
   color: white;
   font-size: 12px;
 }
+
+.button-create-user:hover {
+  background-color: rgba(243, 111, 33, 0.5) !important;
+}

@@ -1,10 +1,10 @@
-
 .navbar-incluir {
-    margin-bottom: 2vh;
+  margin-bottom: 2vh;
 }
 
 .logo-image {
-    height: 5vh;
-    width: 10vw;
-    margin-right: 30vw;
+  height: 5vh;
+  width: 10vw;
+  margin-right: 30vw;
+  cursor: pointer;
 }

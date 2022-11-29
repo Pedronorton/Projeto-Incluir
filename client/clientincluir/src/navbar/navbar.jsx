@@ -1,5 +1,5 @@
 import * as React from "react";
-import logoIncluir from "../assets/logo-incluir.png"
+import logoIncluir from "../assets/logo-incluir.png";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,7 +15,8 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import "./navbar.css"
+import "./navbar.css";
+import Cookies from "js-cookie";
 
 function ResponsiveAppBar() {
   const history = useNavigate();
@@ -43,7 +44,8 @@ function ResponsiveAppBar() {
   };
 
   const logout = () => {
-    alert("aqui");
+    Cookies.remove("token");
+    Cookies.remove("userMail");
     history("/login");
   };
 
@@ -63,11 +65,22 @@ function ResponsiveAppBar() {
   ];
 
   return (
-    <AppBar className= "navbar-incluir" position="static" style={{ backgroundColor: "#FFFFFF"}}>
+    <AppBar
+      className="navbar-incluir"
+      position="static"
+      style={{ backgroundColor: "#FFFFFF" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <img alt="Projeto Incluir" src={logoIncluir} className="logo-image"/>
-        
+          <img
+            alt="Projeto Incluir"
+            src={logoIncluir}
+            className="logo-image"
+            onClick={() => {
+              history("/");
+            }}
+          />
+
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -80,7 +93,7 @@ function ResponsiveAppBar() {
               <MenuIcon />
             </IconButton>
             <Menu
-              style={{ background: '#F36F21'}}
+              style={{ background: "#F36F21" }}
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -99,8 +112,10 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem  key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" sx={{color: "blue"}}>{page.name} </Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" sx={{ color: "blue" }}>
+                    {page.name}{" "}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -121,9 +136,7 @@ function ResponsiveAppBar() {
               color: "inherit",
               textDecoration: "none",
             }}
-          >
-            LOGO
-          </Typography>
+          ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -131,7 +144,7 @@ function ResponsiveAppBar() {
                 onClick={() => {
                   changeRoute(page.href);
                 }}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "black", display: "block" }}
               >
                 {page.name}
               </Button>
@@ -142,7 +155,7 @@ function ResponsiveAppBar() {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  alt={user ? user.email : ""}
+                  alt={user ? user.name : ""}
                   src="/static/images/avatar/2.jpg"
                 />
               </IconButton>

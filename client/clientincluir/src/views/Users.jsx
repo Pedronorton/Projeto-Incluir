@@ -23,6 +23,7 @@ import {
   TextField,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import Cookies from "js-cookie";
 
 export default function Users() {
   const [userList, setUserList] = useState([]);
@@ -38,8 +39,13 @@ export default function Users() {
 
   const fetchUsers = async () => {
     try {
-      const response = await dataService.getAllUsers();
-      console.log(response);
+      const storageToken = Cookies.get("token");
+
+      const response = await dataService.getAllUsers({
+        headers: {
+          Authorization: storageToken,
+        },
+      });
       setUserList(response.data);
     } catch (e) {
       alert(e);
@@ -66,11 +72,21 @@ export default function Users() {
       //   String(initialDate.getMonth()).padStart(2, "0") +
       //   "/" +
       //   String(initialDate.getFullYear()).padStart(2, "0");
+      let totalRegisteredHours = 0;
+      let totalRegisteredHoursMinutes = 0;
+
+      totalRegisteredHours = (element.registeredHours / 60) | 0;
+
+      totalRegisteredHoursMinutes = element.registeredHours % 60;
       const data = {
         id: element.id,
         name: element.name,
         function: element.function,
-        registeredHours: element.registeredHours,
+        registeredHours:
+          totalRegisteredHours +
+          " h : " +
+          totalRegisteredHoursMinutes.toFixed(0) +
+          " m",
       };
 
       list.push(data);
@@ -91,9 +107,9 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <TableRow
-                key={row.name}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">

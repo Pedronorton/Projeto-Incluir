@@ -26,8 +26,8 @@ public class PresenceController {
 
     @RequestMapping(value = "/markPresence", method = RequestMethod.POST)
     public ResponseEntity<Presence> markPresence(@RequestBody PresenceDTO presenceDTO) throws NotFoundError {
-        presenceService.create(presenceDTO);
-        return ResponseEntity.noContent().build();
+        Presence presence = presenceService.create(presenceDTO);
+        return ResponseEntity.ok().body(presence);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

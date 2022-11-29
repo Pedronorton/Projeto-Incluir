@@ -5,6 +5,7 @@ import { IStackScreenProps } from '../library/IStackScreenProps';
 import { IQRCodePayload } from '../library/IQRCodePayload';
 import DataService from '../service/DataService.js';
 import { useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
     const [loading, setLoading] = useState(true);
     const [scanData, setScanData] = useState<IQRCodePayload>();
@@ -20,36 +21,32 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
     }, [link]);
 
     const irParaLink = async () => {
-        // try {
-        //     console.log('link');
-        //     console.log(link);
-
-        //     const response = await DataService.postPresence(link);
-        //     console.log(response);
-        //     Alert.alert('Presença confirmada');
-        // } catch (e) {
-        //     console.log(e);
-        // }
         const supported = await Linking.canOpenURL(link);
-
-        // if (supported) {
-        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-        // by some browser in the mobile
         const splitLink = link.split('-');
         const idQRCode = splitLink[0];
         const idClazz = splitLink[1];
-        console.log('user', user);
 
         const data = {
             idAula: idClazz,
             idUser: user.id,
             idQRCode: idQRCode
         };
+
         try {
-            await DataService.postPresence(data);
-            Alert.alert('Presenca confirmada com sucesso');
+            const token = await AsyncStorage.getItem('@token');
+
+            const response = await DataService.postPresence(data, {
+                headers: {
+                    Authorization: token
+                }
+            });
+
+            Alert.alert('Presença confirmada com sucesso');
         } catch (e) {
-            Alert.alert('falha ao marcar presenca');
+            console.log('Testando erro');
+            console.log(e.response);
+
+            Alert.alert('Falha ao marcar presenca');
         }
         // await Linking.openURL(url);
         // } else {
@@ -93,7 +90,6 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
     if (permission) {
         return (
             <>
-                <Text>{link}</Text>
                 <BarCodeScanner
                     style={[styles.container]}
                     onBarCodeScanned={({ type, data }) => {
@@ -105,7 +101,7 @@ const ScanScreen: React.FunctionComponent<IStackScreenProps> = (props) => {
                         }
                     }}
                 >
-                    <Text style={styles.text}>Scan the QR code.</Text>
+                    {/* <Text style={styles.text}>Scan</Text> */}
                 </BarCodeScanner>
             </>
         );

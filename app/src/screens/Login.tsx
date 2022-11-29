@@ -21,21 +21,35 @@ export default function Login() {
         try {
             setIsLoadingRefreshToken(true);
             const token = await AsyncStorage.getItem('@refreshToken');
-            console.log(token);
+            const username = await AsyncStorage.getItem('@username');
 
             const data = {
                 refreshToken: token
             };
             const response = await DataService.refreshToken(data);
-            console.log(response);
 
             await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
-            await AsyncStorage.setItem('@token', response.data.accessToken);
-            navigation.navigate('QRCode');
+            await AsyncStorage.setItem('@token', 'Bearer ' + response.data.accessToken);
         } catch (e) {
             console.log(e);
         }
         setIsLoadingRefreshToken(false);
+
+        try {
+            const token = await AsyncStorage.getItem('@token');
+            const username = await AsyncStorage.getItem('@username');
+            const response = await DataService.getUserByEmail(username, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data);
+
+            dispatch({ type: 'SET_USER', payload: { id: response.data.id, isAuth: true, name: response.data.name } });
+            navigation.navigate('QRCode');
+        } catch (e) {
+            console.log(e);
+        }
     };
     const handleLogin = async () => {
         try {
@@ -48,22 +62,18 @@ export default function Login() {
 
             try {
                 await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
-                await AsyncStorage.setItem('@token', response.data.token);
+                await AsyncStorage.setItem('@token', 'Bearer ' + response.data.token);
                 await AsyncStorage.setItem('@username', response.data.username);
                 navigation.navigate('QRCode');
             } catch (e) {
                 // saving error
             }
         } catch (e) {
-            console.log(e);
-
-            Alert.alert('erro');
+            Alert.alert('Erro ao logar');
         }
     };
 
     const handleChangeRoute = (route) => {
-        console.log('aqui');
-
         navigation.navigate(route);
     };
 

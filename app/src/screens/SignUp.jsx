@@ -11,7 +11,6 @@ export default function SignUp() {
 
     const [password, setPassword] = useState('');
     const [responsibility, setResponsibility] = useState('');
-    const [entryDate, setEntryDate] = useState('');
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingRefreshToken, setIsLoadingRefreshToken] = useState(false);
@@ -29,6 +28,7 @@ export default function SignUp() {
                 await AsyncStorage.setItem('@refreshToken', response.data.refreshToken);
                 await AsyncStorage.setItem('@token', response.data.token);
                 await AsyncStorage.setItem('@username', response.data.username);
+                Alert.alert('Usuário criado com sucesso');
                 navigation.navigate('QRCode');
                 dispatch({ type: 'LOGIN', payload: true });
             } catch (e) {

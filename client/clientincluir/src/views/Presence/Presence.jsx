@@ -25,6 +25,7 @@ import { QRCodeCanvas } from "qrcode.react";
 import Paper from "@mui/material/Paper";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import "./presence.css";
+import Cookies from "js-cookie";
 export default function Presence() {
   const [listPresence, setListPresence] = useState([]);
   const [name, setName] = useState("");
@@ -46,7 +47,13 @@ export default function Presence() {
 
   const getAllPresence = async () => {
     try {
-      const response = await DataService.getAllPresence();
+      const storageToken = Cookies.get("token");
+
+      const response = await DataService.getAllPresence({
+        headers: {
+          Authorization: storageToken,
+        },
+      });
       setListPresence(response.data);
     } catch (e) {
       alert(e);
@@ -111,9 +118,9 @@ export default function Presence() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.map((row, index) => (
                   <TableRow
-                    key={row.name}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">

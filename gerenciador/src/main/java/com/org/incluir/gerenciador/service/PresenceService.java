@@ -39,19 +39,22 @@ public class PresenceService {
         Optional<Clazz> clazz = clazzRepository.findById(presenceDTO.getIdAula());
         Optional<User> user = userRepository.findById(presenceDTO.getIdUser());
         if(qrCode.isEmpty()){
-            throw new NotFoundError("QRCode");
+            throw new NotFoundError("QRcode inválido");
         }
         if(clazz.isEmpty()){
-            throw new NotFoundError("Class");
+            throw new NotFoundError("Aula inválida");
         }
         if(user.isEmpty()){
-            throw new NotFoundError("User");
+            throw new NotFoundError("Usuário inválido");
         }
 
         if(validations(qrCode.get(), clazz.get(), user.get())){
             String key = qrCode.get().getId()+'-'+clazz.get().getId()+"-"+user.get().getId();
             Optional<Presence> presence = presenceRepository.findByKey(key);
             if(presence.isPresent()){
+                if(presence.get().getConfirmation()){
+                    throw new NotFoundError("Usuário já confirmou presença");
+                }
                 Date endDate = new Date();
                 Double hours = user.get().getRegisteredHours();
                 if (hours == null){
@@ -61,7 +64,7 @@ public class PresenceService {
                 presence.get().setOutConfirmation(true);
                 presence.get().setConfirmation(true);
                 Double minutes = DateUtil.obterDiferencaMinutosDouble(endDate, presence.get().getStartedHour());
-                user.get().setRegisteredHours(hours + minutes/60);
+                user.get().setRegisteredHours(hours + minutes);
                 userRepository.save(user.get());
                 presenceRepository.save(presence.get());
                 return presence.get();
@@ -88,7 +91,7 @@ public class PresenceService {
         if(DateUtil.beforeOrEquals(dateNow, qrCode.getFinalDate())){
             return true;
         }else{
-            throw new NotFoundError("QRCode");
+            throw new NotFoundError("QRCode inválido");
         }
     }
 

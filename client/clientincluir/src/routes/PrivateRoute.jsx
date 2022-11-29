@@ -6,7 +6,11 @@ import ResponsiveAppBar from "../navbar/navbar";
 import Cookies from "js-cookie";
 
 export function Privateroute({ children }) {
-  const { isAuth } = useUser();
+  const { isAuth, user } = useUser();
+  useEffect(() => {
+    console.log(isAuth);
+    console.log(user);
+  }, []);
 
   return isAuth ? (
     <div>

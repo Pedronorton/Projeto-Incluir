@@ -10,6 +10,7 @@ import com.org.incluir.gerenciador.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,15 @@ public class QRCodeService {
 
     public List<QRCode> getAll(){
         List<QRCode> list = qrCodeRepository.findAll();
-        return list;
+
+        List<QRCode> returnList = new ArrayList<>();
+        for (QRCode qrCode : list){
+            Date date = new Date();
+            if(DateUtil.beforeOrEquals(date, qrCode.getFinalDate())){
+                returnList.add(qrCode);
+            }
+        }
+        return returnList;
     }
 
     public Optional<QRCode> findByKey(String url) throws NotFoundError {
